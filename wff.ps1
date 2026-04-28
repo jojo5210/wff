@@ -1,0 +1,268 @@
+ $servers = @(
+    "1.1.1.1",
+    "4.2.2.2",
+    "eu-epic.gamerkhaan.com",
+    "uae-epic.gamerkhaan.com",
+    "8.8.8.8",
+    "ams.ping.clt.mygames.zone"
+)
+
+ $serverDisplayNames = @{
+    "1.1.1.1" = "1.1.1.1"
+    "4.2.2.2" = "4.2.2.2"
+    "eu-epic.gamerkhaan.com" = "EpicGames EU"
+    "uae-epic.gamerkhaan.com" = "EpicGames UAE"
+    "8.8.8.8" = "8.8.8.8"
+    "ams.ping.clt.mygames.zone" = "Warface EU"
+}
+
+ $headerInterval = 15
+ $columnWidth = 18
+
+function Write-Header {
+    param($Servers, $ColumnWidth, $DisplayNames)
+    $serverCount = $Servers.Count
+    $i = 0
+    foreach ($server in $Servers) {
+        $i++
+        $displayName = $DisplayNames[$server]
+        if (-not $displayName) { $displayName = $server }
+        
+        $totalPadding = $ColumnWidth - $displayName.Length
+        $leftPadding = [math]::Floor($totalPadding / 2)
+        $rightPadding = $ColumnWidth - $leftPadding - $displayName.Length
+        
+        Write-Host (" " * [math]::Max(0, $leftPadding)) -NoNewline
+
+        if ($displayName -like "*GamerKhaan*") {
+            $parts = $displayName -split ' '
+            Write-Host $parts[0] -NoNewline -ForegroundColor White
+            Write-Host " " -NoNewline
+            Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+        } elseif ($displayName -like "*EpicGames*") {
+            $parts = $displayName -split ' '
+            Write-Host $parts[0] -NoNewline -ForegroundColor Red
+            Write-Host " " -NoNewline
+            Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+        } else {
+            $headerColor = "Cyan"
+            if ($displayName -like "*1.1.1.1*") { $headerColor = "White" }
+            elseif ($displayName -like "*4.2.2.2*") { $headerColor = "Magenta" }
+            Write-Host $displayName -NoNewline -ForegroundColor $headerColor
+        }
+        
+        if ($i -eq $serverCount) {
+            Write-Host (" " * [math]::Max(0, $rightPadding))
+        } else {
+            Write-Host (" " * [math]::Max(0, $rightPadding)) -NoNewline
+        }
+    }
+    Write-Host ("=" * ($ColumnWidth * $Servers.Count)) -ForegroundColor Cyan
+}
+
+ $pingData = @{}
+foreach ($server in $servers) {
+    $pingData[$server] = @{
+        Latencies = New-Object System.Collections.Generic.List[int]
+        Timeouts = 0
+    }
+}
+
+ $startTime = Get-Date
+
+Clear-Host
+Write-Host @"
+  _______      ___      .___  ___.  _______ .______       
+ /  _____|    /   \     |   \/   | |   ____||   _  \      
+|  |  __     /  ^  \    |  \  /  | |  |__   |  |_)  |     
+|  | |_ |   /  /_\  \   |  |\/|  | |   __|  |      /      
+|  |__| |  /  _____  \  |  |  |  | |  |____ |  |\  \----. 
+ \______| /__/     \__\ |__|  |__| |_______|| _| `._____| 
+                                                          
+ __  ___  __    __       ___           ___      .__   __. 
+|  |/  / |  |  |  |     /   \         /   \     |  \ |  | 
+|  '  /  |  |__|  |    /  ^  \       /  ^  \    |   \|  | 
+|    <   |   __   |   /  /_\  \     /  /_\  \   |  . `  | 
+|  .  \  |  |  |  |  /  _____  \   /  _____  \  |  |\   | 
+|__|\__\ |__|  |__| /__/     \__\ /__/     \__\ |__| \__| 
+                                                                                                                                                                                                                        
+                                                      
+GamerKhaan Ping Monitor - Online Gaming Perfected!
+"@ -ForegroundColor Cyan
+Write-Host "Quest started at $($startTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray
+Write-Host "============================================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Header -Servers $servers -ColumnWidth $columnWidth -DisplayNames $serverDisplayNames
+
+ $runspacePool = $null
+try {
+    $runspacePool = [RunspaceFactory]::CreateRunspacePool(1, [int]$servers.Count)
+    $runspacePool.Open()
+    $rowCounter = 0
+    while ($true) {
+        $runspaces = @()
+        foreach ($server in $servers) {
+            $powershell = [PowerShell]::Create().AddScript({
+                param($ServerName)
+                Test-Connection -ComputerName $ServerName -Count 1 -ErrorAction SilentlyContinue
+            }).AddParameter("ServerName", $server)
+            $powershell.RunspacePool = $runspacePool
+            $runspaces += [PSCustomObject]@{
+                Server = $server
+                PowerShell = $powershell
+                Result = $powershell.BeginInvoke()
+            }
+        }
+        $currentPingResults = @{}
+        foreach ($runspace in $runspaces) {
+            if ($runspace.Result.AsyncWaitHandle.WaitOne(1500)) {
+                $pingResult = $runspace.PowerShell.EndInvoke($runspace.Result)
+                $latency = if ($pingResult) { $pingResult.ResponseTime } else { "Timeout" }
+            } else {
+                $latency = "Timeout"
+                try { $runspace.PowerShell.EndInvoke($runspace.Result) } catch { }
+            }
+            $currentPingResults[$runspace.Server] = $latency
+            $runspace.PowerShell.Dispose()
+        }
+        
+        $serverCount = $servers.Count
+        $i = 0
+        foreach ($server in $servers) {
+            $i++
+            $latency = $currentPingResults[$server]
+            $serverData = $pingData[$server]
+            if ($latency -eq "Timeout") {
+                $serverData.Timeouts++
+                $text = "Timeout!"
+                $latencyText = $text
+                $msText = ""
+            } else {
+                $serverData.Latencies.Add([int]$latency)
+                $latencyText = [string]$latency
+                $msText = "ms"
+            }
+            
+            $color = "White"
+            if ($latency -eq "Timeout") {
+                $color = "White"  # Changed from "Red" to "White"
+            } else {
+                if ($server -like "*uae*") {
+                    if ($latency -lt 75) { $color = "Green" }
+                    elseif ($latency -le 100) { $color = "Yellow" }
+                    else { $color = "Red" }
+                } else {
+                    if ($latency -lt 110) { $color = "Green" }
+                    elseif ($latency -le 135) { $color = "Yellow" }
+                    else { $color = "Red" }
+                }
+            }
+            
+            $fullText = $latencyText + $msText
+            $padding = ($columnWidth - $fullText.Length) / 2
+            $leftPadding = [math]::Floor($padding)
+            $rightPadding = [math]::Ceiling($padding)
+            
+            Write-Host (" " * [math]::Max(0, $leftPadding)) -NoNewline
+            Write-Host $latencyText -NoNewline -ForegroundColor $color
+            if ($msText) {
+                Write-Host $msText -NoNewline -ForegroundColor Red
+            }
+            
+            if ($i -eq $serverCount) {
+                Write-Host (" " * [math]::Max(0, $rightPadding))
+            } else {
+                Write-Host (" " * [math]::Max(0, $rightPadding)) -NoNewline
+            }
+        }
+        
+        $rowCounter++
+        if ($rowCounter -eq 1 -or $rowCounter % $headerInterval -eq 0) {
+            Write-Host ""
+            Write-Header -Servers $servers -ColumnWidth $columnWidth -DisplayNames $serverDisplayNames
+        }
+        Start-Sleep -Milliseconds 500
+    }
+}
+finally {
+    $endTime = Get-Date
+    $duration = $endTime - $startTime
+    if ($runspacePool -ne $null) {
+        $runspacePool.Close()
+        $runspacePool.Dispose()
+    }
+    Write-Host "`nQuest completed!" -ForegroundColor Yellow
+    Write-Host "Total playtime: $($duration.ToString('hh\:mm\:ss'))" -ForegroundColor Gray
+    Write-Host "`n==================== Summary ====================" -ForegroundColor Cyan
+    foreach ($server in $servers) {
+        $displayName = $serverDisplayNames[$server]
+        if (-not $displayName) { $displayName = $server }
+        $data = $pingData[$server]
+        $totalPings = $data.Latencies.Count + $data.Timeouts
+        if ($totalPings -eq 0) {
+            if ($displayName -like "*GamerKhaan*") {
+                $parts = $displayName -split ' '
+                Write-Host $parts[0] -NoNewline -ForegroundColor White
+                Write-Host " " -NoNewline
+                Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+            } elseif ($displayName -like "*EpicGames*") {
+                $parts = $displayName -split ' '
+                Write-Host $parts[0] -NoNewline -ForegroundColor Red
+                Write-Host " " -NoNewline
+                Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+            } else {
+                $headerColor = "Cyan"
+                if ($displayName -like "*1.1.1.1*") { $headerColor = "White" }
+                elseif ($displayName -like "*4.2.2.2*") { $headerColor = "Magenta" }
+                Write-Host $displayName -NoNewline -ForegroundColor $headerColor
+            }
+            Write-Host ": No pings logged." -ForegroundColor Gray
+            continue
+        }
+        $packetLoss = [math]::Round(($data.Timeouts / $totalPings) * 100, 2)
+        $packetLossDisplay = "{0:0.0}" -f $packetLoss
+        $packetLossColor = if ($packetLoss -eq 0) { "Green" } else { "Red" }
+        
+        if ($data.Latencies.Count -gt 0) {
+            $avg = [math]::Round(($data.Latencies | Measure-Object -Average).Average, 2)
+            if ($server -like "*uae*") {
+                $avgColor = if ($avg -lt 75) { "Green" } elseif ($avg -le 100) { "Yellow" } else { "Red" }
+            } else {
+                $avgColor = if ($avg -lt 110) { "Green" } elseif ($avg -le 135) { "Yellow" } else { "Red" }
+            }
+            $avgIcon = "[AVG]"
+        } else {
+            $avg = "N/A"
+            $avgColor = "Gray"
+            $avgIcon = ""
+        }
+        
+        if ($displayName -like "*GamerKhaan*") {
+            $parts = $displayName -split ' '
+            Write-Host $parts[0] -NoNewline -ForegroundColor White
+            Write-Host " " -NoNewline
+            Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+        } elseif ($displayName -like "*EpicGames*") {
+            $parts = $displayName -split ' '
+            Write-Host $parts[0] -NoNewline -ForegroundColor Red
+            Write-Host " " -NoNewline
+            Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
+        } else {
+            $headerColor = "Cyan"
+            if ($displayName -like "*1.1.1.1*") { $headerColor = "White" }
+            elseif ($displayName -like "*4.2.2.2*") { $headerColor = "Magenta" }
+            Write-Host $displayName -NoNewline -ForegroundColor $headerColor
+        }
+        Write-Host ":" -ForegroundColor White
+        Write-Host "  Packet Loss: " -NoNewline -ForegroundColor Gray
+        Write-Host "$packetLossDisplay%" -ForegroundColor $packetLossColor
+        Write-Host "  Avg Ping: " -NoNewline -ForegroundColor Gray
+        Write-Host $avg -NoNewline -ForegroundColor $avgColor
+        Write-Host " " -NoNewline
+        Write-Host "ms " -NoNewline -ForegroundColor Red
+        Write-Host $avgIcon -ForegroundColor Yellow
+        Write-Host ""
+    }
+    Write-Host "=================================================" -ForegroundColor Cyan
+    Write-Host "Thanks for playing Games!" -ForegroundColor Green
+}
