@@ -87,7 +87,7 @@ Write-Host @"
 |__|\__\ |__|  |__| /__/     \__\ /__/     \__\ |__| \__| 
                                                                                                                                                                                                                         
                                                       
-RoYa︻デ══━一 Ping Monitor - Online Gaming Perfected!  ̿̿ ̿̿ ̿̿ ̿'̿'\̵͇̿̿\з=(◣_◢)=ε/̵͇̿̿/'̿'̿ ̿̿ 
+RoYa(✿◠‿◠) Ping Monitor - Online Gaming Perfected!
 "@ -ForegroundColor Cyan
 Write-Host "Quest started at $($startTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray
 Write-Host "============================================================================" -ForegroundColor Cyan
