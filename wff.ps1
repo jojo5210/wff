@@ -16,8 +16,8 @@
     "ams.ping.clt.mygames.zone" = "Warface EU"
 }
 
- $headerInterval = 5
- $columnWidth = 30
+ $headerInterval = 10
+ $columnWidth = 18
 
 function Write-Header {
     param($Servers, $ColumnWidth, $DisplayNames)
