@@ -90,7 +90,7 @@ Write-Host @"
 RoYa Ping Monitor - Online Gaming Perfected!
 "@ -ForegroundColor Cyan
 Write-Host "Quest started at $($startTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray
-Write-Host "============================================================================" -ForegroundColor Cyan
+Write-Host "============================================================================,===" -ForegroundColor Cyan
 Write-Host ""
 Write-Header -Servers $servers -ColumnWidth $columnWidth -DisplayNames $serverDisplayNames
 
