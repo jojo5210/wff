@@ -16,8 +16,8 @@
     "ams.ping.clt.mygames.zone" = "Warface EU"
 }
 
- $headerInterval = 15
- $columnWidth = 18
+ $headerInterval = 5
+ $columnWidth = 30
 
 function Write-Header {
     param($Servers, $ColumnWidth, $DisplayNames)
@@ -90,7 +90,7 @@ Write-Host @"
 RoYa Ping Monitor - Online Gaming Perfected!
 "@ -ForegroundColor Cyan
 Write-Host "Quest started at $($startTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray
-Write-Host "============================================================================,===" -ForegroundColor Cyan
+Write-Host "============================================================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Header -Servers $servers -ColumnWidth $columnWidth -DisplayNames $serverDisplayNames
 
