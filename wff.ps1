@@ -34,7 +34,7 @@ function Write-Header {
         
         Write-Host (" " * [math]::Max(0, $leftPadding)) -NoNewline
 
-        if ($displayName -like "*GamerKhaan*") {
+        if ($displayName -like "*8.8.8.8*") {
             $parts = $displayName -split ' '
             Write-Host $parts[0] -NoNewline -ForegroundColor White
             Write-Host " " -NoNewline
@@ -73,18 +73,7 @@ foreach ($server in $servers) {
 Clear-Host
 Write-Host @"
 
-⠀⠀⢠⡾⠛⠳⠶⣤⣀⣠⣤⣤⣴⡟⠁⠀⠙⣷⠟⠋⠉⠉⢿⡀⠀⠀⠀⠀⠀
-⠀⠀⠀⣾⠁⠀⠀⠀⠀⠉⠀⠀⠀⡿⠀⢠⣟⣿⠿⠳⢦⣤⡴⣼⣇⠀⠀⠀⠀
-⠀⠀⠀⢻⣤⠀⠀⠀⠀⠀⠀⠀⠀⢿⣄⣀⣽⣏⠀⠀⢸⣷⡄⠀⣿⠀⠀⠀⠀
-⠀⠀⠀⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠉⠓⢾⡟⠛⢁⣼⣟⠀⠀⠀⠀
-⠀⢀⣼⣇⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣙⣿⣿⣥⣽⢤⠀⠀⠀
-⣀⣈⣷⣏⣁⠀⠀⢀⠀⠉⠙⠻⣶⣾⣳⣶⠟⠉⠁⢀⠀⠀⠀⠶⢻⡟⠒⠒⠀
-⠀⠀⠸⣇⣀⠀⠀⠛⠉⠂⠀⢀⡿⣉⣉⢿⡄⠀⠒⠉⠋⠀⠀⠠⣼⠧⢤⠀⠀
-⠀⠐⠛⠻⣍⣀⡀⠀⠀⢀⣠⠞⠙⠧⠼⠈⠳⣄⡀⠀⠀⠀⣠⣴⣟⡀⠀⠀⠀
-⠀⠀⣠⠴⠛⢿⣭⠿⠿⢯⡅⠀⠀⠀⠀⠀⠀⣠⣭⣩⣭⣭⣿⣋⠈⠙⠂⠀⠀
-⠀⠀⠀⠀⢠⡟⠁⠀⠀⠀⣿⠶⠶⠶⠤⠶⣾⠇⠀⠘⣧⠀⠀⢹⡇⠀⠀⠀⠀
-⠀⠀⠀⠀⠸⣇⠀⠀⣰⠾⠋⠀⠀⠀⠀⠀⣧⡀⠀⠀⢿⣄⣤⡾⠁⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠈⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⠈⠛⠒⠒⠚⠋⠁⠀⠀⠀⠀⠀⠀
+
                                                                                                                                                                                                                         
                                                       
 RoYa Ping Monitor - Online Gaming Perfected!
@@ -200,7 +189,7 @@ finally {
         $data = $pingData[$server]
         $totalPings = $data.Latencies.Count + $data.Timeouts
         if ($totalPings -eq 0) {
-            if ($displayName -like "*GamerKhaan*") {
+            if ($displayName -like "*8.8.8.8*") {
                 $parts = $displayName -split ' '
                 Write-Host $parts[0] -NoNewline -ForegroundColor White
                 Write-Host " " -NoNewline
@@ -237,7 +226,7 @@ finally {
             $avgIcon = ""
         }
         
-        if ($displayName -like "*GamerKhaan*") {
+        if ($displayName -like "*8.8.8.8*") {
             $parts = $displayName -split ' '
             Write-Host $parts[0] -NoNewline -ForegroundColor White
             Write-Host " " -NoNewline
