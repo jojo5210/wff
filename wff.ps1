@@ -1,18 +1,18 @@
  $servers = @(
     "1.1.1.1",
     "4.2.2.2",
+    "8.8.8.8",
     "global.ping.warface.ru",
     "amsterdam.warface.com",
-    "8.8.8.8",
     "ams.ping.clt.mygames.zone"
 )
 
  $serverDisplayNames = @{
     "1.1.1.1" = "1.1.1.1"
     "4.2.2.2" = "4.2.2.2"
+    "8.8.8.8" = "8.8.8.8"
     "global.ping.warface.ru" = "Warface Ru"
     "amsterdam.warface.com" = "Warface AmS"
-    "8.8.8.8" = "8.8.8.8"
     "ams.ping.clt.mygames.zone" = "Warface Cluch"
 }
 
@@ -39,7 +39,7 @@ function Write-Header {
             Write-Host $parts[0] -NoNewline -ForegroundColor White
             Write-Host " " -NoNewline
             Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
-        } elseif ($displayName -like "*EpicGames*") {
+        } elseif ($displayName -like "*Warface*") {
             $parts = $displayName -split ' '
             Write-Host $parts[0] -NoNewline -ForegroundColor Red
             Write-Host " " -NoNewline
@@ -73,22 +73,18 @@ foreach ($server in $servers) {
 Clear-Host
 Write-Host @"
 
-⠀⠀⠀⠀⠀⠀⠀⠰⣷⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣥⡀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⡠⠀⠀⢸⣿⣿⣿⣿⡿⣟⡯⠗⠒⠚⠒⠑⠚⠽⣟⣿⢿⣿⣿⣇⠈⠢⡀⠀⠀⠀⠀
-⠀⠀⢀⠞⠀⠀⠀⢘⣛⡻⠭⠓⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠓⠒⠚⠀⠀⠘⢆⠀⠀⠀
-⠀⢠⠏⠀⠀⠀⠀⠀⣠⣾⣿⣿⠷⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣯⣙⣦⣄⠀⠀⠀⠀⠈⢧⠀⠀
-⠀⡎⠀⠀⠀⠀⠀⡼⠟⠉⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣈⣙⠻⣧⡀⠀⡄⠀⠈⢇⠀
-⢸⠀⠀⠀⠀⠳⣦⣥⣶⠿⠛⠛⠻⢿⣦⡀⠀⠀⠀⠀⣠⣶⠟⠋⠉⠛⢿⣷⣶⠿⢁⣀⠀⢸⡀
-⡎⠀⠀⠈⠛⠶⣾⠋⠀⠀⣤⣾⡟⠑⣯⣣⠀⠀⠀⣰⣻⡿⣏⠉⢱⢦⠀⠈⠻⡟⠛⠁⠀⠀⡇
-⡇⠀⠀⠀⠀⢠⡇⠀⠀⣸⣿⣤⣿⣿⣷⣿⡇⠀⠀⣿⣿⣧⣾⣿⣿⣿⡇⠀⠀⢻⠀⠀⠀⠀⡇
-⢧⠀⠀⠀⠀⢸⡇⠀⠀⢹⠸⡿⠻⣿⡟⣺⡇⠀⠀⢻⡆⢿⠟⢿⡿⢻⡇⠀⠀⣸⠇⠀⠀⠀⡇
-⠸⡀⠀⠀⠀⠰⣷⣀⠤⠤⠷⠧⢠⣉⠴⡿⠀⠀⠀⠈⢟⠮⣀⡮⠤⠮⠤⠤⢤⣿⡀⠀⠀⢸⠀
-⠀⢣⠀⠀⠀⠘⢵⣀⡦⠀⠉⢉⣳⡶⠉⠁⡔⠊⠉⠲⠈⠉⢲⣥⡀⠀⠀⠸⣍⡽⠁⠀⢀⡎⠀
-⠀⠀⢣⡀⣀⣀⡤⢤⡀⠀⠀⠈⠉⢷⣄⡀⠀⠀⠀⠀⠀⣠⣼⠋⠁⠀⠀⣀⣤⣀⣀⣀⠞⠀⠀
-⠀⠀⠀⠙⣽⣦⢳⣆⠈⢢⡀⠀⠀⠈⢿⣿⢯⣍⣨⣭⣿⡿⠃⠀⠀⢀⠞⠁⣴⠏⣴⣿⡄⠀⠀
-⠀⠀⠀⠀⠈⠻⢷⣽⣦⡀⠈⠙⠛⠛⠓⠿⣶⡯⠥⣿⡿⠕⠒⠒⠚⠁⢀⣾⠏⣸⣿⠏⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠙⠪⠤⣀⣀⣤⣤⣤⡶⠘⡿⣿⠃⡀⡀⠀⠀⠀⠒⠋⣱⡾⠟⠁⠀⠀⠀⠀
-
+⠀⠀⢠⡾⠛⠳⠶⣤⣀⣠⣤⣤⣴⡟⠁⠀⠙⣷⠟⠋⠉⠉⢿⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⣾⠁⠀⠀⠀⠀⠉⠀⠀⠀⡿⠀⢠⣟⣿⠿⠳⢦⣤⡴⣼⣇⠀⠀⠀⠀
+⠀⠀⠀⢻⣤⠀⠀⠀⠀⠀⠀⠀⠀⢿⣄⣀⣽⣏⠀⠀⢸⣷⡄⠀⣿⠀⠀⠀⠀
+⠀⠀⠀⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠉⠓⢾⡟⠛⢁⣼⣟⠀⠀⠀⠀
+⠀⢀⣼⣇⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣙⣿⣿⣥⣽⢤⠀⠀⠀
+⣀⣈⣷⣏⣁⠀⠀⢀⠀⠉⠙⠻⣶⣾⣳⣶⠟⠉⠁⢀⠀⠀⠀⠶⢻⡟⠒⠒⠀
+⠀⠀⠸⣇⣀⠀⠀⠛⠉⠂⠀⢀⡿⣉⣉⢿⡄⠀⠒⠉⠋⠀⠀⠠⣼⠧⢤⠀⠀
+⠀⠐⠛⠻⣍⣀⡀⠀⠀⢀⣠⠞⠙⠧⠼⠈⠳⣄⡀⠀⠀⠀⣠⣴⣟⡀⠀⠀⠀
+⠀⠀⣠⠴⠛⢿⣭⠿⠿⢯⡅⠀⠀⠀⠀⠀⠀⣠⣭⣩⣭⣭⣿⣋⠈⠙⠂⠀⠀
+⠀⠀⠀⠀⢠⡟⠁⠀⠀⠀⣿⠶⠶⠶⠤⠶⣾⠇⠀⠘⣧⠀⠀⢹⡇⠀⠀⠀⠀
+⠀⠀⠀⠀⠸⣇⠀⠀⣰⠾⠋⠀⠀⠀⠀⠀⣧⡀⠀⠀⢿⣄⣤⡾⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠈⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⠈⠛⠒⠒⠚⠋⠁⠀⠀⠀⠀⠀⠀
                                                                                                                                                                                                                         
                                                       
 RoYa Ping Monitor - Online Gaming Perfected!
@@ -209,7 +205,7 @@ finally {
                 Write-Host $parts[0] -NoNewline -ForegroundColor White
                 Write-Host " " -NoNewline
                 Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
-            } elseif ($displayName -like "*EpicGames*") {
+            } elseif ($displayName -like "*Warface*") {
                 $parts = $displayName -split ' '
                 Write-Host $parts[0] -NoNewline -ForegroundColor Red
                 Write-Host " " -NoNewline
@@ -246,7 +242,7 @@ finally {
             Write-Host $parts[0] -NoNewline -ForegroundColor White
             Write-Host " " -NoNewline
             Write-Host $parts[1] -NoNewline -ForegroundColor Yellow
-        } elseif ($displayName -like "*EpicGames*") {
+        } elseif ($displayName -like "*Warface*") {
             $parts = $displayName -split ' '
             Write-Host $parts[0] -NoNewline -ForegroundColor Red
             Write-Host " " -NoNewline
