@@ -1,8 +1,8 @@
  $servers = @(
     "1.1.1.1",
     "4.2.2.2",
-    "eu-epic.gamerkhaan.com",
-    "uae-epic.gamerkhaan.com",
+    "global.ping.warface.ru",
+    "amsterdam.warface.com",
     "8.8.8.8",
     "ams.ping.clt.mygames.zone"
 )
@@ -10,10 +10,10 @@
  $serverDisplayNames = @{
     "1.1.1.1" = "1.1.1.1"
     "4.2.2.2" = "4.2.2.2"
-    "eu-epic.gamerkhaan.com" = "EpicGames EU"
-    "uae-epic.gamerkhaan.com" = "EpicGames UAE"
+    "global.ping.warface.ru" = "Warface Ru"
+    "amsterdam.warface.com" = "Warface AmS"
     "8.8.8.8" = "8.8.8.8"
-    "ams.ping.clt.mygames.zone" = "Warface EU"
+    "ams.ping.clt.mygames.zone" = "Warface Cluch"
 }
 
  $headerInterval = 10
