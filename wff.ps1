@@ -3,7 +3,7 @@
     "4.2.2.2",
     "8.8.8.8",
     "global.ping.warface.ru",
-    "amsterdam.warface.com",
+    "rostov.ping.warface.ru",
     "ams.ping.clt.mygames.zone"
 )
 
@@ -12,7 +12,7 @@
     "4.2.2.2" = "4.2.2.2"
     "8.8.8.8" = "8.8.8.8"
     "global.ping.warface.ru" = "Warface Ru"
-    "amsterdam.warface.com" = "Warface AmS"
+    "rostov.ping.warface.ru" = "Warface Rostov"
     "ams.ping.clt.mygames.zone" = "Warface Cluch"
 }
 
